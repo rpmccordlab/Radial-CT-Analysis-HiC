@@ -35,10 +35,6 @@ if not os.path.isdir(out):
 
 dloc = []
 
-cutoff = np.percentile(mat,95)
-
-mat = mat * (mat > cutoff)
-
 for it,_ in enumerate(indx):
     chrID, loc = _.split(":")
     if chrID in ['chrY','chrM']:
@@ -48,7 +44,11 @@ mat = np.delete(mat,dloc,0)
 mat = np.delete(mat,dloc,1)
 indx = np.delete(indx,dloc)
 
-chrm = [_ for _ in xrange(1,23)] + ['X']
+cutoff = np.percentile(mat[np.triu_indices(mat.shape[0])],95)
+
+mat = mat * (mat > cutoff)
+
+chrm = [_ for _ in range(1,23)] + ['X']
 
 residue_number = len(indx)
 
@@ -66,17 +66,17 @@ np.savetxt(filename+'.label',node_label)
 
 G = nx.Graph()
 
-for i in xrange(residue_number):
+for i in range(residue_number):
 	G.add_node(i)
 
-for i in xrange(mat.shape[0]-1):
-	for j in xrange(i+1,mat.shape[0]):
+for i in range(mat.shape[0]-1):
+	for j in range(i+1,mat.shape[0]):
 		if mat[i,j]:
 			G.add_edge(i,j,weight=mat[i,j])
 
-for rindex,rint in enumerate(xrange(1,num_samples+1)):
+for rindex,rint in enumerate(range(1,num_samples+1)):
 	#print rindex
-	pos = nx.spring_layout(G,dim=3,random_state=rint)
+	pos = nx.spring_layout(G,dim=3,seed=rint,iterations=500)
 	xyz = [list(pos[i]) for i in pos]
 	np.savetxt(out+'/csn_'+str(rint)+'_coor.txt',xyz)
 
