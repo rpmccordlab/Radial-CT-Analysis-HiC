@@ -12,7 +12,7 @@ The analysis technique can be executed by running the following commands in thre
 
 python mat2net.py -i GM12878-Control-R2__hg19__genome__C-2500000-iced.matrix.gz -n 100 -o test_dir
 
--i : input file name in .matrix.gz format
+-i : input file name in .matrix.gz format </br>
 -n : number of samples (network structures)
 -o : location of the output directory for generated samples
 
